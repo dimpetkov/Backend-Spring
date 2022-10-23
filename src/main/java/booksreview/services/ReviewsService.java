@@ -121,7 +121,11 @@ public class ReviewsService {
     }
 
     public void deleteReviewsByBookId(int bookId) {
-        reviewsRepository.findAll().removeIf(reviews -> reviews.getBook().getId() == bookId);
+        List<Reviews> reviewsToDelete = reviewsRepository.findAll()
+                .stream().filter(review -> (review.getBook().getId()) == bookId).toList();
+        if(!reviewsToDelete.isEmpty()) {
+            reviewsToDelete.forEach(review -> reviewsRepository.deleteById(review.getId()));
+        }
     }
 
 
